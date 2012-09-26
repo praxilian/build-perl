@@ -1,0 +1,205 @@
+#!/bin/bash
+
+set -e -u
+
+declare    PATH=/usr/bin:/bin
+declare -r PROGNAME=${0##*/}
+declare -i DEBUG=1
+declare    bin_dir=
+declare    lib_dir=
+declare -i simulate=0
+#declare -a args=("$@")
+
+function usage {
+  echo
+  echo $PROGNAME '[-b <bin_dir>] [-l <lib_dir>] <path to top dir>'
+  echo
+  echo eg $PROGNAME /usr/local
+  echo
+  echo eg $PROGNAME -b /usr/local/bin -l /usr/local/lib/site_perl /tmp/testdir
+  echo
+}
+
+function fail {
+  echo "${PROGNAME}: ${1:-"Unknown error"}" >&2
+  usage
+  exit 1
+}
+trap fail ERR
+
+bin_dir=""
+lib_dir=""
+while getopts 'b:l:s' opt; do
+  case "$opt" in
+    b)
+      bin_dir=$OPTARG;;
+    l)
+      lib_dir=$OPTARG;;
+    s)
+      simulate=1;;
+  esac
+done
+shift $(( $OPTIND - 1 ))
+argpath=${1:-""}
+
+if [ -z "$argpath" ]; then
+  fail "No path given"
+elif ! [ -d "$argpath" ]; then
+  fail "Failed to locate path ($argpath)"
+elif ! [ -d "$argpath/lib" ]; then
+  fail "Failed to find lib ($argpath/lib)"
+fi
+# $argpath/lib/perl5 doesn't need to exist
+
+# Set source paths
+srcbin_dir="$argpath/bin"
+srclib_dir="$argpath/lib"
+if [ -d "$srclib_dir/site_perl" ]; then
+  srclib_dir="$srclib_dir/site_perl"
+fi
+if [ -d "$srclib_dir/perl5" ]; then
+  srclib_dir="$srclib_dir/perl5"
+fi
+
+# Set target paths
+if [ -z "$bin_dir" ]; then
+  bin_dir="$argpath/bin"
+fi
+if [ -z "$lib_dir" ]; then
+  lib_dir="$argpath/lib"
+fi
+if [ $simulate -gt 0 ]; then
+  echo mkdir -p "$bin_dir" "$lib_dir"
+else
+  mkdir -p "$bin_dir" "$lib_dir"
+fi
+
+if [ "$srclib_dir" == "$lib_dir" ]; then
+  if [ $DEBUG -gt 0 ]; then
+    echo "Nothing to do" >&2
+  fi
+  exit 0
+fi
+
+# Move the easy nodes
+# Look at top-level objects in lib
+find "$srclib_dir" -mindepth 1 -maxdepth 1 \
+| \
+while read c; do
+  # Strip the common prefix
+  b="${c#$srclib_dir/}"
+  # Calculate target path
+  t="$lib_dir/$b"
+  # If target location is unoccupied, take the easy option
+  if ! [ -e "$t" ]; then
+    if [ $simulate -gt 0 ]; then
+      echo mv "$c" "$t"
+    else
+      mv "$c" "$t"
+    fi
+  fi
+done
+# Exists a bin dir to move?
+if [ -d "$srcbin_dir" ]; then
+  # Look at top-level objects in bin
+  find "$srcbin_dir" -mindepth 1 -maxdepth 1 \
+  | \
+  while read c; do
+    # Strip the common prefix
+    b="${c#$srcbin_dir/}"
+    # Calculate target path
+    t="$bin_dir/$b"
+    # If target location is unoccupied, take the easy option
+    if ! [ -e "$t" ]; then
+      if [ $simulate -gt 0 ]; then
+        echo mv "$c" "$t"
+      else
+        mv "$c" "$t"
+      fi
+    fi
+  done
+fi
+# Any perllocal.pod to move?
+find "$srclib_dir" -name perllocal.pod \
+| \
+while read c; do
+  # Strip the common prefix
+  b="${c#$srclib_dir/}"
+  # Calculate target path
+  t="$lib_dir/$b"
+  # If target location is unoccupied, take the easy option
+  if ! [ -e "$t" ]; then
+    # Move it, retaining permissions
+    if [ $simulate -gt 0 ]; then
+      echo mv "$c" "$t"
+    else
+      mv "$c" "$t"
+    fi
+    # Try to correct the path
+    if [ $simulate -gt 0 ]; then
+      echo perl -i -ple\"s#$srclib_dir#$lib_dir#\" "$t"
+    else
+      perl -i -ple"s#$srclib_dir#$lib_dir#" "$t"
+    fi
+  else
+    # Translate contents into existing target
+    if [ $simulate -gt 0 ]; then
+      echo perl -ple\"s#$srclib_dir#$lib_dir#\" \<"$c" \>\>"$t"
+    else
+      perl -ple"s#$srclib_dir#$lib_dir#" <"$c" >>"$t"
+    fi
+    # Delete source so it doesn't overwrite target
+    if [ $simulate -gt 0 ]; then
+      echo rm -f "$c"
+    else
+      rm -f "$c"
+    fi
+  fi
+done
+
+# Use rsync for the case of existing dirs
+if [ $simulate -gt 0 ]; then
+  if [ -e "$srclib_dir/perl5" ]; then
+    echo rm -rf "$srclib_dir/perl5"
+  fi
+  echo rsync -a --remove-source-files "$srclib_dir/" "$lib_dir"
+  if [ -d "$srcbin_dir" -a "$bin_dir" != "$srcbin_dir" ]; then
+    echo rsync -a --remove-source-files "$srcbin_dir/" "$bin_dir"
+  fi
+else
+  rm -rf "$srclib_dir/perl5"  # just in case the crazy has happened
+  rsync -a --remove-source-files "$srclib_dir/" "$lib_dir"
+  if [ -d "$srcbin_dir" -a "$bin_dir" != "$srcbin_dir" ]; then
+    rsync -a --remove-source-files "$srcbin_dir/" "$bin_dir"
+  fi
+fi
+
+# Remove empty dirs
+find "$srclib_dir" -depth -type d \
+| \
+while read d; do
+  if [ $simulate -gt 0 ]; then
+    echo rmdir --ignore-fail-on-non-empty "$d"
+  else
+    rmdir --ignore-fail-on-non-empty "$d"
+  fi
+done
+if [ -e "$argpath/lib/perl5" ]; then
+  fail "Failed to move all children"
+fi
+
+exit 0
+
+=pod
+
+This gets rid of the 'perl5' path component, so that you can then
+
+  use lib 'myapp/lib'
+
+instead of
+
+  use lib 'myapp/lib/perl5'
+
+=cut
+
+#TODO: check whether rsync is avail
