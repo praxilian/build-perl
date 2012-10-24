@@ -1,0 +1,12 @@
+build-perl (0.00.02) squeeze; urgency=low
+
+  * Made defaults in env files more useful
+
+ -- Larig Tech <larig.tech@gmail.com>  Wed, 24 Oct 2012 12:11:45 +0100
+
+build-perl (0.00.01) squeeze; urgency=low
+
+  * Initial build
+
+ -- Larig Tech <larig.tech@gmail.com>  Tue, 16 Oct 2012 12:46:25 +0100
+
