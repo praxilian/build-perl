@@ -1,0 +1,15 @@
+=head1 Build Perl: To-Do List
+
+=over 4
+
+=item *
+
+Add a script to download a chosen build tar ball.
+
+=item *
+
+Add Policy.sh and scripts to help manage it.
+
+=back
+
+=cut
