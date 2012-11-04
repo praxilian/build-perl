@@ -1,3 +1,9 @@
+build-perl (0.01.00) squeeze; urgency=low
+
+  * Updated 5.16.1 -> 5.16.2
+
+ -- Larig Tech <larig.tech@gmail.com>  Sun, 04 Nov 2012 14:46:05 +0000
+
 build-perl (0.00.02) squeeze; urgency=low
 
   * Made defaults in env files more useful
