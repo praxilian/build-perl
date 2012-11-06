@@ -9,3 +9,6 @@ Makefile*
 MANIFEST*
 !MANIFEST.SKIP
 *META.*
+debian/build-perl/
+debian/build-perl.debhelper.log
+debian/files

@@ -1,3 +1,9 @@
+build-perl (0.01.01) squeeze; urgency=low
+
+  * Updated example Policy.sh files for v5.16.2
+
+ -- Larig Tech <larig.tech@gmail.com>  Tue, 06 Nov 2012 14:09:06 +0000
+
 build-perl (0.01.00) squeeze; urgency=low
 
   * Updated 5.16.1 -> 5.16.2
