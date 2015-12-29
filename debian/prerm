@@ -1,9 +1,0 @@
-#!/bin/sh
-
-PACKAGE=build-perl
-
-# ------
-# Config
-# ------
-
-exit
