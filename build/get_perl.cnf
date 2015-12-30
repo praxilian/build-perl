@@ -1,4 +1,2 @@
 perl_base=/opt/perl
-perl_version=5.20.2
-build_base=/srv/build-perl/build
-build_as_root=1
+perl_version=5.22.1

@@ -1,7 +1,12 @@
 # Build Perl
 
-Utilities and example files for building a custom perl.
+Build one or more perl binaries.
 
-http://larig.github.com/build-perl/
+Leave the system perl for the system and escape its single-release
+multi-threaded trappings.  Now it's even easier to compile perl binaries for
+your application code.  Just say what you want (5.22.1) and where you want it
+(/opt/perl) then run get_perl.sh to deliver it.
 
-http://github.com/larig/build-perl/wiki
+http://praxilian.github.io/build-perl
+
+http://github.com/praxilian/build-perl/wiki

@@ -5,6 +5,7 @@ set -e -u
 declare -r PROGNAME="${0##*/}"
 declare -i DEBUG=1
 declare -r CNFFILE="${0%sh}cnf"
+declare -x PATH=/usr/bin:/bin
 
 function fatal {
   echo "${PROGNAME}: ${1:-"Fatal error"}" >&2
@@ -17,7 +18,8 @@ trap fatal ERR
 . "$CNFFILE"
 perl_base=${perl_base%/}
 perl_base=${perl_base:-/tmp}
-build_base=${build_base:-$perl_base/build}
+here="${0%/*}"
+build_base="$(cd ${here:-.} && pwd)"
 
 # Checks
 for req in arch less make sed tar uname wget; do
@@ -45,10 +47,13 @@ cd perl-"$perl_version" || fatal "Failed to enter perl dir (perl-$perl_version)"
 sed -e"s,<%base%>,$perl_base,g; s,<%version%>,$perl_version,g" <../tmpl/Policy.sh >Policy.sh
 
 # Build
+unset PERL_MB_OPT PERL_MM_OPT
 ./Configure -des
 make && make test
 
 # Deploy
+rm -rf "$perl_base"/"$perl_version".old
+mv -f "$perl_base"/"$perl_version" "$perl_base"/"$perl_version".old
 make install
 cd ..
 rm -rf perl-"$perl_version"
@@ -57,8 +62,6 @@ chmod 0644 "$perl_base"/"$perl_version"/env
 
 # Cpanminus
 (cd "$perl_base"/"$perl_version"/lib && rm -f perl5 && ln -s . perl5)
-export PERL_MB_OPT="--install_base $perl_base/$perl_version"
-export PERL_MM_OPT="INSTALL_BASE=$perl_base/$perl_version"
 "$perl_base"/"$perl_version"/bin/perl "$build_base"/cpanminus App::cpanminus
 
 # Show results

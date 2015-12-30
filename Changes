@@ -1,24 +1,11 @@
-build-perl (0.01.01) squeeze; urgency=low
+0.022 2015-12-30
+  * Rewritten to use templates.
+  * Auto-detect build_base.
 
-  * Updated example Policy.sh files for v5.16.2
+0.011 2012-11-06
+  * Updated example Policy.sh files for v5.16.2.
+  * Updated 5.16.1 -> 5.16.2.
 
- -- Larig Tech <larig.tech@gmail.com>  Tue, 06 Nov 2012 14:09:06 +0000
-
-build-perl (0.01.00) squeeze; urgency=low
-
-  * Updated 5.16.1 -> 5.16.2
-
- -- Larig Tech <larig.tech@gmail.com>  Sun, 04 Nov 2012 14:46:05 +0000
-
-build-perl (0.00.02) squeeze; urgency=low
-
-  * Made defaults in env files more useful
-
- -- Larig Tech <larig.tech@gmail.com>  Wed, 24 Oct 2012 12:11:45 +0100
-
-build-perl (0.00.01) squeeze; urgency=low
-
-  * Initial build
-
- -- Larig Tech <larig.tech@gmail.com>  Tue, 16 Oct 2012 12:46:25 +0100
-
+0.002 2012-10-24
+  * Made defaults in env files more useful.
+  * Initial build.
