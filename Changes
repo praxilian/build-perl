@@ -1,11 +1,14 @@
+0.031 2016-03-15
+  - Fixed bugs in get_perl.sh.
+
 0.022 2015-12-30
-  * Rewritten to use templates.
-  * Auto-detect build_base.
+  - Rewritten to use templates.
+  - Auto-detect build_base.
 
 0.011 2012-11-06
-  * Updated example Policy.sh files for v5.16.2.
-  * Updated 5.16.1 -> 5.16.2.
+  - Updated example Policy.sh files for v5.16.2.
+  - Updated 5.16.1 -> 5.16.2.
 
 0.002 2012-10-24
-  * Made defaults in env files more useful.
-  * Initial build.
+  - Made defaults in env files more useful.
+  - Initial build.
