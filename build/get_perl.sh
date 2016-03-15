@@ -53,7 +53,7 @@ make && make test
 
 # Deploy
 rm -rf "$perl_base"/"$perl_version".old
-mv -f "$perl_base"/"$perl_version" "$perl_base"/"$perl_version".old
+[ -e "$perl_base"/"$perl_version" ] && mv -f "$perl_base"/"$perl_version" "$perl_base"/"$perl_version".old
 mkdir -p "$perl_base"/"$perl_version"
 make install
 cd ..
