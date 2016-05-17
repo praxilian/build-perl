@@ -1,15 +1,20 @@
+0.101 2016-03-22
+  - Move file: x/env -> x.env.
+  - Patch ExtUtils::Manifest to handle symlinks.
+  - Default to v5.24.0
+
 0.033 2016-03-15
-  - Fixed bugs in get_perl.sh.
-  - Avoided var name collisions.
+  - Fix bugs in get_perl.sh.
+  - Avoid var name collisions.
 
 0.022 2015-12-30
-  - Rewritten to use templates.
+  - Rewrite to use templates.
   - Auto-detect build_base.
 
 0.011 2012-11-06
-  - Updated example Policy.sh files for v5.16.2.
-  - Updated 5.16.1 -> 5.16.2.
+  - Update example Policy.sh files for v5.16.2.
+  - Update 5.16.1 -> 5.16.2.
 
 0.002 2012-10-24
-  - Made defaults in env files more useful.
+  - Make defaults in env files more useful.
   - Initial build.

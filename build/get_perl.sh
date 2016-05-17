@@ -58,12 +58,15 @@ mkdir -p "$perl_base"/"$perl_version"
 make install
 cd ..
 rm -rf perl-"$perl_version"
-sed -e"s,<%base%>,$perl_base,g; s,<%version%>,$perl_version,g" <tmpl/env >"$perl_base"/"$perl_version"/env
-chmod 0644 "$perl_base"/"$perl_version"/env
+sed -e"s,<%base%>,$perl_base,g; s,<%version%>,$perl_version,g" <tmpl/env >"$perl_base"/"$perl_version".env
+chmod 0644 "$perl_base"/"$perl_version".env
+
+# Patch
+(cd "$perl_base"/"$perl_version"/lib && patch -p0 <"$build_base"/ExtUtils.Manifest.pm.patch)
 
 # Cpanminus
 (cd "$perl_base"/"$perl_version"/lib && rm -f perl5 && ln -s . perl5)
-(. "$perl_base"/"$perl_version"/env; "$perl_base"/"$perl_version"/bin/perl "$build_base"/cpanminus App::cpanminus)
+(. "$perl_base"/"$perl_version".env; "$perl_base"/"$perl_version"/bin/perl "$build_base"/cpanminus App::cpanminus)
 
 # Show results
 env -i "$perl_base"/"$perl_version"/bin/perl -V

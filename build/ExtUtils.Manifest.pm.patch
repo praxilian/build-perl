@@ -1,0 +1,11 @@
+--- ExtUtils/Manifest.pm.orig	2016-03-27 13:18:07.007225682 +0100
++++ ExtUtils/Manifest.pm	2016-03-27 17:35:55.000000000 +0100
+@@ -199,7 +199,7 @@
+     # $File::Find::name is unavailable.
+     # Also, it's okay to use / here, because MANIFEST files use Unix-style
+     # paths.
+-    find({wanted => $wanted, follow_fast => 1},
++    find({wanted => $wanted, follow_fast => 1, follow_skip => 2},
+ 	 $Is_MacOS ? ":" : ".");
+ 
+     return $found;
