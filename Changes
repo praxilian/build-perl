@@ -1,3 +1,6 @@
+0.111 2016-06-07
+  - Add option for download-only.
+
 0.101 2016-03-22
   - Move file: x/env -> x.env.
   - Patch ExtUtils::Manifest to handle symlinks.

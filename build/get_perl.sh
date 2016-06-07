@@ -20,6 +20,7 @@ perl_base=${perl_base%/}
 perl_base=${perl_base:-/tmp}
 here="${0%/*}"
 build_base="$(cd ${here:-.} && pwd)"
+target="${target:-""}"
 
 # Checks
 for req in arch less make sed tar uname wget; do
@@ -39,6 +40,11 @@ rm -f .test_file
 perl_tar=perl-"$perl_version".tar.gz
 [ -f "$perl_tar" ] || wget http://www.cpan.org/src/5.0/"$perl_tar" || fatal 'Failed to wget perl'
 [ -f cpanminus ] || wget -O cpanminus https://cpanmin.us || fatal 'Failed to wget cpanminus'
+
+if [ "$target" == download ]; then
+  echo "Downloaded as requested" >&2
+  exit 0
+fi
 
 # Prepare sources
 rm -rf perl-"$perl_version"

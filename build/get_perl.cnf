@@ -1,2 +1,3 @@
 perl_base=/opt/perl
 perl_version=5.24.0
+#target=download
