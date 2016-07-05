@@ -3,7 +3,7 @@ base_banana_flibble="${perl_base:-<%base%>}"
 ver_coco_naninky=<%version%>
 export PERL_MB_OPT="--install_base $base_banana_flibble/$ver_coco_naninky"
 export PERL_MM_OPT="INSTALL_BASE=$base_banana_flibble/$ver_coco_naninky"
-if [ "$(which perl$ver_coco_naninky)" != "$base_banana_flibble/$ver_coco_naninky/bin/perl$ver_coco_naninky" ]; then
+if [ "$(which perl$ver_coco_naninky 2>/dev/null)" != "$base_banana_flibble/$ver_coco_naninky/bin/perl$ver_coco_naninky" ]; then
   if [ "$(id -u)" -eq 0 ]; then
     # Remember to edit these paths if yours should be different
     PATH="/usr/local/sbin:/usr/local/bin:$base_banana_flibble/$ver_coco_naninky/bin:/usr/sbin:/usr/bin:/sbin:/bin"
