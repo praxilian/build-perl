@@ -69,6 +69,7 @@ chmod 0644 "$perl_base"/"$perl_version".env
 
 # Patch
 (cd "$perl_base"/"$perl_version"/lib && patch -p0 <"$build_base"/ExtUtils.Manifest.pm.patch)
+(cd "$perl_base"/"$perl_version"/lib && patch -p0 <"$build_base"/ExtUtils.MM_Any.pm.patch)
 
 # Cpanminus
 (cd "$perl_base"/"$perl_version"/lib && rm -f perl5 && ln -s . perl5)

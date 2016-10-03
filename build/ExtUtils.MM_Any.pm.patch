@@ -1,0 +1,13 @@
+--- ExtUtils/MM_Any.pm.orig	2016-09-07 19:27:42.000000000 +0100
++++ ExtUtils/MM_Any.pm	2016-10-03 11:24:42.604454334 +0100
+@@ -2042,8 +2042,8 @@
+ =cut
+ 
+ my %map = (
+-           lib      => [qw(lib perl5)],
+-           arch     => [('lib', 'perl5', $Config{archname})],
++           lib      => ['lib'],
++           arch     => ['lib', $Config{archname}],
+            bin      => [qw(bin)],
+            man1dir  => [qw(man man1)],
+            man3dir  => [qw(man man3)]
